@@ -2,6 +2,7 @@ import { Box, Text, VStack, SimpleGrid, Input, Button } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { blogService } from '@/services/blogService'
 import { useAuth } from '@/context/AuthContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import BlogCard from '@/components/common/BlogCard'
 import BlogForm from '@/components/forms/BlogForm'
 
@@ -12,6 +13,7 @@ const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [showForm, setShowForm] = useState(false)
   const { isAdmin } = useAuth()
+  const { bgSecondary, bgCard, textPrimary, textSecondary, borderColor } = useThemeColors()
 
   useEffect(() => {
     fetchBlogs()
@@ -48,20 +50,24 @@ const Blog = () => {
   }
 
   return (
-    <Box py={16} px={4}>
+    <Box py={16} px={4} bg={bgSecondary} transition="all 0.3s">
       <VStack maxW="1200px" mx="auto" gap={8}>
         <VStack textAlign="center" gap={4}>
-          <Text fontSize="4xl" fontWeight="bold" color="gray.800">Our Blog</Text>
-          <Text color="gray.600" maxW="600px">
+          <Text fontSize="4xl" fontWeight="bold" color={textPrimary}>Our Blog</Text>
+          <Text color={textSecondary} maxW="600px">
             Stay updated with the latest insights, tips, and trends in education and technology
           </Text>
         </VStack>
 
         <Input
-          placeholder="Search articles..."
+          placeholder="   Search articles..."
           maxW="400px"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          bg={bgCard}
+          color={textPrimary}
+          _placeholder={{ color: textSecondary }}
+          borderColor={borderColor}
         />
 
         {isAdmin && (
@@ -73,9 +79,9 @@ const Blog = () => {
         {showForm && <BlogForm onSuccess={handleBlogAdded} />}
 
         {loading ? (
-          <Text>Loading articles...</Text>
+          <Text color={textPrimary}>Loading articles...</Text>
         ) : filteredBlogs.length === 0 ? (
-          <Text color="gray.500">No articles found</Text>
+          <Text color={textSecondary}>No articles found</Text>
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} w="100%">
             {filteredBlogs.map((blog) => (

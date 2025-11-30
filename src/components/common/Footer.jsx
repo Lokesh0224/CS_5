@@ -45,7 +45,7 @@ const Footer = () => {
           </HStack>
           <HStack color="gray.400">
             <FiPhone />
-            <Text>+1 234 567 890</Text>
+            <Text>+91 9344 567 890</Text>
           </HStack>
           <HStack color="gray.400">
             <FiMapPin />

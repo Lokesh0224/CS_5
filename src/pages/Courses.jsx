@@ -2,6 +2,7 @@ import { Box, Text, VStack, SimpleGrid, Input, HStack, Button } from '@chakra-ui
 import { useEffect, useState } from 'react'
 import { courseService } from '@/services/courseService'
 import { useAuth } from '@/context/AuthContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import CourseCard from '@/components/common/CourseCard'
 import CourseForm from '@/components/forms/CourseForm'
 
@@ -13,6 +14,7 @@ const Courses = () => {
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [showForm, setShowForm] = useState(false)
   const { isAdmin } = useAuth()
+  const { bgSecondary, textPrimary, textSecondary, buttonPalette, bgCard } = useThemeColors()
 
   const categories = ['All', 'Web Development', 'Data Science', 'Design', 'Mobile Development', 'Marketing', 'Cloud Computing']
 
@@ -53,21 +55,25 @@ const Courses = () => {
   }
 
   return (
-    <Box py={16} px={4}>
+    <Box py={16} px={4} bg={bgSecondary} transition="all 0.3s">
       <VStack maxW="1200px" mx="auto" gap={8}>
         <VStack textAlign="center" gap={4}>
-          <Text fontSize="4xl" fontWeight="bold" color="gray.800">All Courses</Text>
-          <Text color="gray.600" maxW="600px">
+          <Text fontSize="4xl" fontWeight="bold" color={textPrimary}>All Courses</Text>
+          <Text color={textSecondary} maxW="600px">
             Explore our wide range of courses and start your learning journey
           </Text>
         </VStack>
 
         <HStack w="100%" gap={4} flexWrap="wrap" justify="center">
           <Input
-            placeholder="Search courses..."
+            placeholder="  Search courses..."
             maxW="300px"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            bg={bgCard}
+            color={textPrimary}
+            _placeholder={{ color: textSecondary }}
+            borderColor={textSecondary}
           />
           <HStack gap={2} flexWrap="wrap" justify="center">
             {categories.map((category) => (
@@ -75,7 +81,7 @@ const Courses = () => {
                 key={category}
                 size="sm"
                 variant={selectedCategory === category ? 'solid' : 'outline'}
-                colorPalette="teal"
+                colorPalette={buttonPalette}
                 onClick={() => setSelectedCategory(category)}
                 px={4}
                 py={2}
@@ -95,9 +101,9 @@ const Courses = () => {
         {showForm && <CourseForm onSuccess={handleCourseAdded} />}
 
         {loading ? (
-          <Text>Loading courses...</Text>
+          <Text color={textPrimary}>Loading courses...</Text>
         ) : filteredCourses.length === 0 ? (
-          <Text color="gray.500">No courses found</Text>
+          <Text color={textSecondary}>No courses found</Text>
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} w="100%">
             {filteredCourses.map((course) => (

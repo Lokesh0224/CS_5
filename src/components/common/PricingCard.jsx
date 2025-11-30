@@ -1,13 +1,15 @@
 import { Box, Text, VStack, HStack, Button, Badge } from '@chakra-ui/react'
 import { FiCheck } from 'react-icons/fi'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 const PricingCard = ({ plan }) => {
+  const { bgPrimary, textOnPrimary, bgCard, textPrimary, textSecondary, accentColor, buttonPalette } = useThemeColors()
   const isPopular = plan.popular
 
   return (
     <Box
-      bg={isPopular ? 'teal.600' : 'white'}
-      color={isPopular ? 'white' : 'gray.800'}
+      bg={isPopular ? bgPrimary : bgCard}
+      color={isPopular ? textOnPrimary : textPrimary}
       borderRadius="lg"
       shadow="lg"
       p={6}
@@ -17,7 +19,7 @@ const PricingCard = ({ plan }) => {
       transition="all 0.2s"
     >
       {isPopular && (
-        <Badge colorPalette="orange" position="absolute" top={-3} right={4} px={3} py={1}>
+        <Badge colorPalette={buttonPalette} position="absolute" top={-3} right={4} px={3} py={1}>
           Most Popular
         </Badge>
       )}
@@ -27,22 +29,22 @@ const PricingCard = ({ plan }) => {
         </Text>
         <HStack justify="center" align="baseline">
           <Text fontSize="4xl" fontWeight="bold">
-            ${plan.price}
+            Rs.{plan.price}
           </Text>
-          <Text fontSize="sm" color={isPopular ? 'teal.100' : 'gray.500'}>
+          <Text fontSize="sm" color={isPopular ? `${bgPrimary === 'black' ? 'gray.400' : 'teal.100'}` : textSecondary}>
             /{plan.period}
           </Text>
         </HStack>
         <VStack align="start" gap={3} py={4}>
           {plan.features.map((feature, index) => (
             <HStack key={index}>
-              <FiCheck color={isPopular ? '#81E6D9' : '#319795'} />
-              <Text fontSize="sm">{feature}</Text>
+              <FiCheck color={accentColor} />
+              <Text fontSize="sm" color={isPopular ? textOnPrimary : textPrimary}>{feature}</Text>
             </HStack>
           ))}
         </VStack>
         <Button
-          colorPalette={isPopular ? 'orange' : 'teal'}
+          colorPalette={isPopular ? buttonPalette : buttonPalette}
           variant={isPopular ? 'solid' : 'outline'}
           w="full"
           px={4}

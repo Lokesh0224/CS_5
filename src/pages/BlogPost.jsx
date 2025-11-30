@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { blogService } from '@/services/blogService'
 import { useAuth } from '@/context/AuthContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import BlogForm from '@/components/forms/BlogForm'
 
 const BlogPost = () => {
@@ -12,6 +13,7 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const { isAdmin } = useAuth()
+  const { bgSecondary, textPrimary, textSecondary, buttonPalette } = useThemeColors()
 
   useEffect(() => {
     fetchBlog()
@@ -46,26 +48,26 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <Box py={16} px={4} textAlign="center">
-        <Text>Loading article...</Text>
+      <Box py={16} px={4} textAlign="center" bg={bgSecondary} transition="all 0.3s">
+        <Text color={textPrimary}>Loading article...</Text>
       </Box>
     )
   }
 
   if (!blog) {
     return (
-      <Box py={16} px={4} textAlign="center">
-        <Text>Article not found</Text>
+      <Box py={16} px={4} textAlign="center" bg={bgSecondary} transition="all 0.3s">
+        <Text color={textPrimary}>Article not found</Text>
       </Box>
     )
   }
 
   return (
-    <Box py={16} px={4}>
+    <Box py={16} px={4} bg={bgSecondary} transition="all 0.3s">
       <Box maxW="800px" mx="auto">
         {isEditing ? (
           <VStack gap={4}>
-            <Text fontSize="2xl" fontWeight="bold">Edit Article</Text>
+            <Text fontSize="2xl" fontWeight="bold" color={textPrimary}>Edit Article</Text>
             <BlogForm blog={blog} onSuccess={handleUpdate} />
             <Button onClick={() => setIsEditing(false)} px={4} py={2}>Cancel</Button>
           </VStack>
@@ -79,12 +81,12 @@ const BlogPost = () => {
               h="400px"
               objectFit="cover"
             />
-            <Badge colorPalette="purple" fontSize="sm">{blog.category}</Badge>
-            <Text fontSize="3xl" fontWeight="bold">{blog.title}</Text>
-            <Text color="gray.500">
+            <Badge colorPalette={buttonPalette} fontSize="sm">{blog.category}</Badge>
+            <Text fontSize="3xl" fontWeight="bold" color={textPrimary}>{blog.title}</Text>
+            <Text color={textSecondary}>
               By {blog.author} • {new Date(blog.date).toLocaleDateString()}
             </Text>
-            <Text color="gray.700" lineHeight="tall" fontSize="lg" whiteSpace="pre-wrap">
+            <Text color={textSecondary} lineHeight="tall" fontSize="lg" whiteSpace="pre-wrap">
               {blog.content}
             </Text>
             {isAdmin && (

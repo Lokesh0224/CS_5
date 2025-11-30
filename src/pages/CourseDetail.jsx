@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { courseService } from '@/services/courseService'
 import { useAuth } from '@/context/AuthContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { FiClock, FiUsers, FiStar, FiUser } from 'react-icons/fi'
 import CourseForm from '@/components/forms/CourseForm'
 
@@ -13,6 +14,7 @@ const CourseDetail = () => {
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const { isAdmin } = useAuth()
+  const { bgSecondary, textPrimary, textSecondary, buttonPalette, accentColorDark } = useThemeColors()
 
   useEffect(() => {
     fetchCourse()
@@ -47,26 +49,26 @@ const CourseDetail = () => {
 
   if (loading) {
     return (
-      <Box py={16} px={4} textAlign="center">
-        <Text>Loading course...</Text>
+      <Box py={16} px={4} textAlign="center" bg={bgSecondary} transition="all 0.3s">
+        <Text color={textPrimary}>Loading course...</Text>
       </Box>
     )
   }
 
   if (!course) {
     return (
-      <Box py={16} px={4} textAlign="center">
-        <Text>Course not found</Text>
+      <Box py={16} px={4} textAlign="center" bg={bgSecondary} transition="all 0.3s">
+        <Text color={textPrimary}>Course not found</Text>
       </Box>
     )
   }
 
   return (
-    <Box py={16} px={4}>
+    <Box py={16} px={4} bg={bgSecondary} transition="all 0.3s">
       <Box maxW="1200px" mx="auto">
         {isEditing ? (
           <VStack gap={4}>
-            <Text fontSize="2xl" fontWeight="bold">Edit Course</Text>
+            <Text fontSize="2xl" fontWeight="bold" color={textPrimary}>Edit Course</Text>
             <CourseForm course={course} onSuccess={handleUpdate} />
             <Button onClick={() => setIsEditing(false)} px={4} py={2}>Cancel</Button>
           </VStack>
@@ -81,9 +83,9 @@ const CourseDetail = () => {
               objectFit="cover"
             />
             <VStack align="start" gap={4}>
-              <Badge colorPalette="teal" fontSize="sm">{course.category}</Badge>
-              <Text fontSize="3xl" fontWeight="bold">{course.title}</Text>
-              <HStack gap={6} color="gray.600">
+              <Badge colorPalette={buttonPalette} fontSize="sm">{course.category}</Badge>
+              <Text fontSize="3xl" fontWeight="bold" color={textPrimary}>{course.title}</Text>
+              <HStack gap={6} color={textSecondary}>
                 <HStack>
                   <FiUser />
                   <Text>{course.instructor}</Text>
@@ -93,24 +95,24 @@ const CourseDetail = () => {
                   <Text>{course.duration}</Text>
                 </HStack>
               </HStack>
-              <HStack gap={6} color="gray.600">
+              <HStack gap={6} color={textSecondary}>
                 <HStack>
                   <FiUsers />
                   <Text>{course.enrolled} enrolled</Text>
                 </HStack>
                 <HStack>
-                  <FiStar color="#F6AD55" />
+                  <FiStar color={accentColorDark} />
                   <Text>{course.rating} rating</Text>
                 </HStack>
               </HStack>
-              <Text color="gray.700" lineHeight="tall" fontSize="lg">
+              <Text color={textSecondary} lineHeight="tall" fontSize="lg">
                 {course.description}
               </Text>
-              <Text fontSize="3xl" fontWeight="bold" color="teal.600">
+              <Text fontSize="3xl" fontWeight="bold" color={accentColorDark}>
                 ${course.price}
               </Text>
               <HStack gap={4}>
-                <Button colorPalette="teal" size="lg" px={6} py={3}>
+                <Button colorPalette={buttonPalette} size="lg" px={6} py={3}>
                   Enroll Now
                 </Button>
                 {isAdmin && (
